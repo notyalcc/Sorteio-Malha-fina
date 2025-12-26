@@ -1,0 +1,28 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+.botao-personalizado {
+    font-weight: bold;
+    font-size: 16px;
+    min-width: 150px;
+    transition: transform 0.2s;
+}
+.botao-personalizado:hover {
+    transform: scale(1.5);
+}
+#sortear-btn {
+    font-size: 1.5rem;
+}
+#resultado {
+    font-size: 7rem;
+    transition: all 0.9s ease-in-out, color 0.9s ease, transform 0.5s ease;
+    animation: pulse 0.6s infinite alternate;
+}
+.titulo-grande {
+    font-size: 6rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+}

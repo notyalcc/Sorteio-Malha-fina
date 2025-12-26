@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorteio Malha Fina</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-dark text-white" onclick="detectarClique(event)">
+<div class="position-absolute top-0 end-0 m-3">
+    <a href="/config" class="btn btn-outline-light">⚙️ Configurações (Admin)</a>
+</div>
+<div class="container text-center py-4">
+    <h1 class="mb-4 animated fadeInDown titulo-grande px-5">
+      <img src="{{ url_for('static', filename='img/dado.gif') }}" alt="Dado" style="height: 130px; margin-right: 10px; vertical-align: middle;">
+      Sorteio Malha Fina
+      <img src="{{ url_for('static', filename='img/Bahianinho.gif') }}" alt="Bahianinho" style="height: 130px; margin-left: 10px; vertical-align: middle;">
+    </h1>
+
+    <div id="datetime" class="mb-4 fs-5"></div>
+
+    <div class="mb-3 d-flex flex-wrap justify-content-center" id="botoes-container">
+        {% for botao in botoes %}
+            <button class="btn btn-primary m-1 botao-personalizado">{{ botao }}</button>
+        {% endfor %}
+    </div>
+
+    <div id="resultado" class="display-1 mt-5 fw-bold animated"></div>
+    <div class="mt-4 animated fadeInDown">CD - 1401 </div>
+    <button class="btn btn-success btn-lg px-5" id="sortear-btn">🎯 REALIZAR SORTEIO</button>
+    <div class="m-1 animated fadeInDown">Desenvolvido por Clayton S. Silva</div>
+</div>
+<script src="{{ url_for('static', filename='custom.js') }}"></script>
+</body>
+</html>
