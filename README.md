@@ -1,5 +1,6 @@
 # Sorteio-Malha-fina
-Aplicação visual de sorteio aleatório ("Malha Fina" vs "Liberado") desenvolvida com Python e Flask. Possui interface animada, feedback sonoro e painel administrativo para personalização de botões. Funciona como Desktop ou Web App.
+Aplicação visual de sorteio aleatório ("Malha Fina" vs "Liberado") desenvolvida com Python e Flask. Possui interface animada, feedback sonoro e painel administrativo para personalização de botões. Funciona como Desktop ou Web App.<img width="1732" height="899" alt="image" src="https://github.com/user-attachments/assets/5c0378df-29ea-4b23-90f0-88fc093c7192" />
+
 # 🎲 Sorteio Visual - Malha Fina
 
 Uma aplicação interativa desenvolvida em **Python (Flask)** para realizar sorteios aleatórios visuais. O sistema simula uma dinâmica de "Malha Fina", indicando se o usuário foi **"Liberado"** (Verde) ou se deve **"Seguir para Malha"** (Vermelho).
