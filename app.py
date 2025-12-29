@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 app.secret_key = "chave_secreta_segura" # Necessário para o login funcionar
 SENHA_ADMIN = "82465123"#DFINA SUA SENHA DE ADMIN AQUI
+SENHA_USUARIO = "via@clayton" # Senha para acessar o sorteio (Operadores)
 
 PALAVRAS_MALHA = ['VAI PARA MALHA', 'SEGUIR PARA MALHA', 'VOCÊ MALHOU']
 PALAVRAS_LIBERADO = ['CARRO LIBERADO', 'PODE SEGUIR', 'AUTORIZADO']
@@ -38,6 +39,8 @@ def salvar_botoes(lista):
 
 @app.route("/")
 def index():
+    if not session.get("usuario_logado"):
+        return redirect(url_for("login_usuario"))
     botoes = carregar_botoes()
     return render_template("index.html", botoes=botoes)
 
@@ -59,6 +62,16 @@ def atualizar_botoes():
     botoes = request.json.get("botoes")
     salvar_botoes(botoes)
     return jsonify({"status": "salvo"})
+
+@app.route("/entrar", methods=["GET", "POST"])
+def login_usuario():
+    erro = None
+    if request.method == "POST":
+        if request.form.get("senha") == SENHA_USUARIO:
+            session["usuario_logado"] = True
+            return redirect(url_for("index"))
+        erro = "Senha incorreta!"
+    return render_template_string(LOGIN_USUARIO_HTML, erro=erro)
 
 # --- ÁREA ADMINISTRATIVA (NOVO) ---
 
@@ -104,6 +117,34 @@ def configuracao():
     return render_template_string(CONFIG_HTML, botoes=botoes)
 
 # --- TEMPLATES HTML (Movidos para o final para limpeza do código) ---
+
+LOGIN_USUARIO_HTML = """
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Acesso ao Sorteio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white d-flex align-items-center justify-content-center vh-100">
+    <div class="card bg-secondary text-white p-4" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center mb-3">Acesso ao Sorteio</h2>
+        <div class="alert alert-info text-dark">
+            <strong>Instruções:</strong><br>
+            1. Insira a senha de acesso abaixo para entrar.<br>
+            2. Na tela principal, clique em um dos botões.<br>
+            3. O sistema indicará o destino (Liberado ou Malha Fina).
+        </div>
+        {% if erro %}<div class="alert alert-danger">{{ erro }}</div>{% endif %}
+        <form method="post">
+            <input type="password" name="senha" class="form-control mb-3" placeholder="Senha de Acesso" required>
+            <button type="submit" class="btn btn-success w-100">Entrar</button>
+        </form>
+    </div>
+</body>
+</html>
+"""
 
 LOGIN_HTML = """
 <!DOCTYPE html>
