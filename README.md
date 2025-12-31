@@ -54,7 +54,7 @@ Para criar um arquivo `.exe` standalone que não precisa de Python instalado na 
 
 ```bash
 pip install pyinstaller
-python -m PyInstaller --noconsole --onefile --icon=icon.ico --hidden-import=flask --add-data "templates;templates" --add-data "static;static" app.py
+
 
 python -m PyInstaller --noconsole --onefile --icon=icon.ico --hidden-import=flask --add-data "templates;templates" --add-data "static;static" app.py
 
