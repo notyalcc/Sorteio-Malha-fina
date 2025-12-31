@@ -26,3 +26,84 @@ body {
     padding: 0;
     color: #ffffff;
 }
+
+/* Estilos da Roleta */
+.roleta-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    margin: 20px auto;
+    perspective: 1000px; /* Adiciona profundidade 3D */
+}
+
+/* Palco inclinado */
+.roleta-palco {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: rotateX(20deg); /* Inclinação 3D */
+    transform-style: preserve-3d;
+}
+
+/* Camada de fundo (Espessura estática) */
+.roleta-fundo {
+    position: absolute;
+    top: 12px; /* Deslocado para baixo para criar volume */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #999; /* Cor da lateral */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6); /* Sombra no chão */
+    z-index: 0;
+}
+
+.roleta {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 10px solid #ffffff;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.3); /* Sombra interna */
+    /* Cria 6 fatias alternando Verde e Vermelho */
+    background: conic-gradient(
+        #45fd00 0deg 60deg,   /* Verde */
+        #ff0d06 60deg 120deg, /* Vermelho */
+        #45fd00 120deg 180deg, /* Verde */
+        #ff0d06 180deg 240deg, /* Vermelho */
+        #45fd00 240deg 300deg, /* Verde */
+        #ff0d06 300deg 360deg  /* Vermelho */
+    );
+    transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Curva de animação suave */
+    z-index: 1;
+    transform-style: preserve-3d;
+}
+
+/* Centro da Roleta (Hub) */
+.centro-roleta {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateZ(10px); /* Salta para fora */
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle at 30% 30%, #ffffff, #cccccc);
+    border-radius: 50%;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    border: 4px solid #fff;
+}
+
+.seta {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; 
+    height: 0; 
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 50px solid #fff; /* Triângulo branco apontando para baixo */
+    z-index: 10;
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
+    transform: translateX(-50%) translateZ(20px); /* Flutua acima da roleta */
+}

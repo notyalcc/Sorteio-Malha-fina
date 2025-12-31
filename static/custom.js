@@ -1,10 +1,23 @@
 let botoes = [];
 let escolhaUsuario = null;
 let ultimoBotao = "";
+let rotacaoAtual = 0; // Para controlar a rotação da roleta
+
+// Mapeamento das frases para os segmentos da roleta (0 a 5)
+// A ordem deve bater com as cores do CSS: Verde, Vermelho, Verde, Vermelho...
+const opcoesRoleta = [
+    'CARRO LIBERADO',    // 0: 0-60 graus (Verde)
+    'VAI PARA MALHA',    // 1: 60-120 graus (Vermelho)
+    'PODE SEGUIR',       // 2: 120-180 graus (Verde)
+    'SEGUIR PARA MALHA', // 3: 180-240 graus (Vermelho)
+    'AUTORIZADO',        // 4: 240-300 graus (Verde)
+    'VOCÊ MALHOU'        // 5: 300-360 graus (Vermelho)
+];
 
 document.addEventListener("DOMContentLoaded", function () {
     const resultado = document.getElementById("resultado");
     const sortearBtn = document.getElementById("sortear-btn");
+    const roletaEl = document.getElementById("roleta");
     botoes = document.querySelectorAll(".botao-personalizado");
 
     function atualizarDataHora() {
@@ -23,26 +36,48 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function sortear() {
-        let animar = ["CARRO LIBERADO", "VAI PARA MALHA", "AUTORIZADO", "PODE SEGUIR", "VOCÊ MALHOU"];
-        for (let i = 0; i < 15; i++) {
-            const temp = animar[Math.floor(Math.random() * animar.length)];
-            resultado.innerText = temp;
-            resultado.style.color = "#cccccc";
-            resultado.style.transform = "scale(1.2)";
-            await new Promise(r => setTimeout(r, 150));
-        }
-
+        // Limpa o resultado anterior enquanto gira
+        resultado.innerText = "";
+        
+        // 1. Busca o resultado no servidor
         const res = await fetch("/sortear", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({escolha: escolhaUsuario, botao_nome: ultimoBotao})
         });
         const data = await res.json();
-        resultado.innerText = data.palavra;
-        resultado.style.color = data.cor;
-        resultado.style.transform = "scale(1.5)";
-        falar(`${data.botao} - ${data.palavra}`);
-        escolhaUsuario = null;
+        
+        // 2. Calcula onde a roleta deve parar
+        // Encontra o índice da frase sorteada na nossa lista de opções
+        let indiceAlvo = opcoesRoleta.indexOf(data.palavra);
+        
+        // Se a frase do servidor não estiver na lista (segurança), pega uma aleatória da cor certa
+        if (indiceAlvo === -1) {
+            // Se for verde (liberado), usa índice 0, se vermelho, usa 1
+            indiceAlvo = (data.cor === "#45fd00") ? 0 : 1;
+        }
+
+        // Cada fatia tem 60 graus. O centro da fatia é (indice * 60) + 30.
+        // Como a seta está no topo (0 graus), precisamos girar a roleta para que o ângulo alvo fique no topo.
+        // A rotação é no sentido horário, então subtraímos o ângulo alvo de 360 (ou invertemos o sinal).
+        // Adicionamos voltas extras (360 * 5) para dar o efeito de giro rápido.
+        
+        const anguloFatia = 60;
+        const anguloAlvo = 360 - ((indiceAlvo * anguloFatia) + (anguloFatia / 2)); 
+        
+        // Atualiza a rotação global acumulando para sempre girar para frente
+        rotacaoAtual += (360 * 5) + (anguloAlvo - (rotacaoAtual % 360));
+        
+        roletaEl.style.transform = `rotate(${rotacaoAtual}deg)`;
+
+        // 3. Aguarda o fim da animação (4 segundos definidos no CSS) para mostrar o resultado
+        setTimeout(() => {
+            resultado.innerText = data.palavra;
+            resultado.style.color = data.cor;
+            resultado.style.transform = "scale(1.5)";
+            falar(`${data.botao} - ${data.palavra}`);
+            escolhaUsuario = null;
+        }, 4000); // Tempo igual ao transition do CSS
     }
 
     sortearBtn.addEventListener("click", () => {

@@ -25,6 +25,17 @@
         {% endfor %}
     </div>
 
+    <!-- Estrutura da Roleta -->
+    <div class="roleta-container mb-4">
+        <div class="roleta-palco">
+            <div class="roleta-fundo"></div> <!-- Simula a espessura 3D -->
+            <div class="roleta" id="roleta">
+                <div class="centro-roleta"></div> <!-- Cubo central -->
+            </div>
+            <div class="seta"></div>
+        </div>
+    </div>
+
     <div id="resultado" class="display-1 mt-5 fw-bold animated"></div>
     <div class="mt-4 animated fadeInDown">CD - 1401 </div>
     <button class="btn btn-success btn-lg px-5" id="sortear-btn">🎯 REALIZAR SORTEIO</button>

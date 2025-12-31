@@ -1,8 +1,15 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, render_template_string
-import random, json, os
+import random, json, os, sys, webbrowser
+from threading import Timer
 
 # Define o diretório base como o local deste script
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys, 'frozen', False):
+    # Se for executável (PyInstaller), usa o diretório do .exe
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    # Se for script Python, usa o diretório do script
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 app = Flask(__name__)
 
 app.secret_key = "chave_secreta_segura" # Necessário para o login funcionar
@@ -116,7 +123,7 @@ def configuracao():
 
     return render_template_string(CONFIG_HTML, botoes=botoes)
 
-# --- TEMPLATES HTML (Movidos para o final para limpeza do código) ---
+# --- TEMPLATES HTML ---
 
 LOGIN_USUARIO_HTML = """
 <!DOCTYPE html>
@@ -220,6 +227,10 @@ CONFIG_HTML = """
 </html>
 """
 
+def abrir_navegador():
+    webbrowser.open_new("http://127.0.0.1:5000")
+
 if __name__ == "__main__":
-    # Em produção, o servidor (Gunicorn/Waitress) gerencia a porta, mas para teste local:
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    # Abre o navegador automaticamente após 1 segundo
+    Timer(1, abrir_navegador).start()
+    app.run(host="0.0.0.0", port=5000)

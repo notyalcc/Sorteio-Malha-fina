@@ -9,6 +9,7 @@ Ideal para controle de fluxo, auditorias aleatórias, brincadeiras ou dinâmicas
 
 ## 🚀 Funcionalidades
 
+*   **Roleta 3D Interativa:** Nova animação tridimensional que gira e para na cor sorteada, criando suspense antes do resultado.
 *   **Sorteio Aleatório:** Algoritmo que define aleatoriamente o resultado com feedback visual imediato.
 *   **Interface Animada:** Uso de animações CSS e GIFs para tornar a experiência visualmente agradável.
 *   **Feedback Sonoro:** Utiliza a API de síntese de voz do navegador para falar o resultado e o nome do botão clicado.
@@ -52,3 +53,6 @@ Para criar um arquivo `.exe` standalone que não precisa de Python instalado na 
 ```bash
 pip install pyinstaller
 python -m PyInstaller --noconsole --onefile --icon=icon.ico --hidden-import=flask --add-data "templates;templates" --add-data "static;static" app.py
+
+python -m PyInstaller --noconsole --onefile --icon=icon.ico --hidden-import=flask --add-data "templates;templates" --add-data "static;static" app.py
+

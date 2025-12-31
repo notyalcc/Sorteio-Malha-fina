@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Configurar Botões</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-dark text-white">
+    <div class="container py-5" style="max-width: 800px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Configurar Botões</h1>
+            <div>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-light me-2">← Voltar ao Sorteio</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-danger">Sair</a>
+            </div>
+        </div>
+        
+        <div class="card bg-secondary text-white mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Adicionar Novo Botão</h5>
+                <form method="post" class="d-flex gap-2">
+                    <input type="hidden" name="acao" value="adicionar">
+                    <input type="text" name="nome" class="form-control" placeholder="Nome do botão" required>
+                    <button type="submit" class="btn btn-success">Adicionar</button>
+                </form>
+            </div>
+        </div>
+
+        <h3>Lista de Botões</h3>
+        <div class="list-group">
+            {% for i in range(botoes|length) %}
+            <div class="list-group-item bg-dark text-white border-secondary d-flex justify-content-between align-items-center mb-2 rounded">
+                <form method="post" class="d-flex gap-2 flex-grow-1 me-2">
+                    <input type="hidden" name="acao" value="editar">
+                    <input type="hidden" name="indice" value="{{i}}">
+                    <input type="text" name="nome" value="{{botoes[i]}}" class="form-control bg-secondary text-white border-0">
+                    <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+                </form>
+                <form method="post">
+                    <input type="hidden" name="acao" value="excluir">
+                    <input type="hidden" name="indice" value="{{i}}">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este botão?')">X</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
