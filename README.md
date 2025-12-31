@@ -33,8 +33,7 @@ Ideal para controle de fluxo, auditorias aleatórias, brincadeiras ou dinâmicas
 
 1.  **Clone o repositório:**
     ```bash
-    git clone https://github.com/SEU-USUARIO/NOME-DO-REPO.git
-    cd NOME-DO-REPO
+    https://github.com/notyalcc/Sorteio-Malha-fina
     ```
 
 2.  **Instale as dependências:**
