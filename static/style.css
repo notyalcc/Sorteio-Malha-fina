@@ -1,109 +1,332 @@
+/* --- GERAL & TEMA FUTURISTA --- */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
 body {
-    font-family: 'Segoe UI', sans-serif;
+    background-color: #0a0a10;
+    color: #e0e0e0;
+    font-family: 'Orbitron', sans-serif;
+    overflow-x: hidden;
 }
-.botao-personalizado {
-    font-weight: bold;
-    font-size: 16px;
-    min-width: 150px;
-    transition: transform 0.2s;
+
+.header-links {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 100;
 }
-.botao-personalizado:hover {
-    transform: scale(1.5);
-}
-#sortear-btn {
-    font-size: 1.5rem;
-}
-#resultado {
-    font-size: 7rem;
-    transition: all 0.9s ease-in-out, color 0.9s ease, transform 0.5s ease;
-    animation: pulse 0.6s infinite alternate;
-}
+
+/* --- TÍTULO E TEXTOS --- */
 .titulo-grande {
-    font-size: 6rem;
-    font-weight: bold;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    color: #ffffff;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow:
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px #00aaff,
+        0 0 35px #00aaff,
+        0 0 40px #00aaff;
+    animation: flicker 2s infinite alternate;
 }
 
-/* Estilos da Roleta */
+@keyframes flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        text-shadow:
+            0 0 5px #fff,
+            0 0 10px #fff,
+            0 0 20px #00aaff,
+            0 0 35px #00aaff,
+            0 0 40px #00aaff;
+    }
+    20%, 24%, 55% {       
+        text-shadow: none;
+    }
+}
+
+.img-titulo {
+    height: 60px;
+    margin: 0 20px;
+    filter: drop-shadow(0 0 10px #fff);
+}
+
+#datetime {
+    color: #00aaff;
+    text-shadow: 0 0 5px #00aaff;
+}
+
+.footer-text {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* --- BOTÕES --- */
+.botao-personalizado, #sortear-btn, .btn-primary, .btn-success {
+    background: linear-gradient(45deg, #007bff, #00aaff);
+    border: 1px solid #00aaff;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px #00aaff, 0 0 10px #00aaff, inset 0 0 5px rgba(255, 255, 255, 0.2);
+    transform: perspective(1px) translateZ(0);
+}
+
+.btn-outline-success {
+    border-color: #28a745;
+    color: #28a745;
+    transition: all 0.3s ease;
+}
+.btn-outline-success:hover {
+    background-color: #28a745;
+    color: white;
+    box-shadow: 0 0 15px #28a745;
+    transform: scale(1.05);
+}
+.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+    transition: all 0.3s ease;
+}
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+    box-shadow: 0 0 15px #dc3545;
+    transform: scale(1.05);
+}
+
+.botao-personalizado:hover, #sortear-btn:hover, .btn-primary:hover, .btn-success:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00aaff, 0 0 30px #00aaff;
+}
+
+.botao-personalizado:disabled, #sortear-btn:disabled, .force-btn:disabled {
+    background: #555 !important;
+    border-color: #666 !important;
+    color: #999 !important;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: scale(1);
+}
+
+/* --- ROleta 3D --- */
 .roleta-container {
-    position: relative;
-    width: 320px;
-    height: 320px;
-    margin: 20px auto;
-    perspective: 1000px; /* Adiciona profundidade 3D */
+    perspective: 1000px;
+    /* Define um container com altura fixa para acomodar a roleta e a seta */
+    height: 230px;
+    /* Usa display block e margin auto para uma centralização horizontal robusta */
+    display: block;
+    width: 200px; /* Largura igual à da roleta */
+    margin: 0 auto 2rem auto;
+    position: relative; /* Essencial para o posicionamento absoluto do 'palco' */
+    transform-style: preserve-3d; /* O container agora é o palco 3D */
 }
 
-/* Palco inclinado */
-.roleta-palco {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform: rotateX(20deg); /* Inclinação 3D */
-    transform-style: preserve-3d;
-}
-
-/* Camada de fundo (Espessura estática) */
 .roleta-fundo {
     position: absolute;
-    top: 12px; /* Deslocado para baixo para criar volume */
+    width: 200px;
+    height: 200px;
+    bottom: 0; /* Alinha na base do container */
     left: 0;
-    width: 100%;
-    height: 100%;
+    background: repeating-conic-gradient(#333 0% 16.66%, #444 16.66% 33.33%);
     border-radius: 50%;
-    background-color: #999; /* Cor da lateral */
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6); /* Sombra no chão */
-    z-index: 0;
+    transform: translateZ(-20px); /* Empurra para trás para dar profundidade */
+    box-shadow: 0 0 20px #000;
 }
 
-.roleta {
-    position: relative;
-    width: 100%;
-    height: 100%;
+.roleta-estatica {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    bottom: 0;
+    left: 0;
     border-radius: 50%;
-    border: 10px solid #ffffff;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.3); /* Sombra interna */
-    /* Cria 6 fatias alternando Verde e Vermelho */
-    background: conic-gradient(
-        #45fd00 0deg 60deg,   /* Verde */
-        #ff0d06 60deg 120deg, /* Vermelho */
-        #45fd00 120deg 180deg, /* Verde */
-        #ff0d06 180deg 240deg, /* Vermelho */
-        #45fd00 240deg 300deg, /* Verde */
-        #ff0d06 300deg 360deg  /* Vermelho */
+    background: repeating-conic-gradient(
+        #45fd00 0% 16.66%, 
+        #ff0d06 16.66% 33.33%
     );
-    transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Curva de animação suave */
-    z-index: 1;
-    transform-style: preserve-3d;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
 }
 
-/* Centro da Roleta (Hub) */
-.centro-roleta {
+.ponteiro-giratorio {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) translateZ(10px); /* Salta para fora */
-    width: 50px;
-    height: 50px;
-    background: radial-gradient(circle at 30% 30%, #ffffff, #cccccc);
-    border-radius: 50%;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-    border: 4px solid #fff;
+    width: 200px;
+    height: 200px;
+    bottom: 0;
+    left: 0;
+    transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1);
+    transform-origin: center;
+    z-index: 15;
+    transform: rotate(0deg);
 }
 
-.seta {
+.ponteiro-giratorio::before {
+    content: '';
     position: absolute;
-    top: -25px;
+    top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 0; 
-    height: 0; 
-    border-left: 25px solid transparent;
-    border-right: 25px solid transparent;
-    border-top: 50px solid #fff; /* Triângulo branco apontando para baixo */
-    z-index: 10;
-    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
-    transform: translateX(-50%) translateZ(20px); /* Flutua acima da roleta */
+    width: 10px;
+    height: 90px;
+    background-color: #0400ff;
+    border-radius: 5px;
+    box-shadow: 0 0 100px #0400ff;
+    
+}
+
+.centro-roleta {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    bottom: 80px; /* (200px / 2) - (40px / 2) */
+    left: 50%;
+    background: #111;
+    border-radius: 50%;
+    transform: translateX(-50%) translateZ(5px);
+    border: 5px solid #0400ff;
+    box-shadow: 0 0 50px #0400ff;
+    z-index: 50; /* Acima do ponteiro */
+}
+
+/* --- RESULTADO --- */
+#resultado {
+    text-transform: uppercase;
+    transition: color 0.5s;
+}
+
+.resultado-final {
+    animation: pulse-glow 1s forwards;
+}
+
+@keyframes pulse-glow {
+    0% {
+        transform: scale(1);
+        text-shadow: none;
+    }
+    50% {
+        transform: scale(1.2);
+        text-shadow: 0 0 5px currentColor; /* Efeito de brilho reduzido */
+    }
+    100% {
+        transform: scale(1.1);
+        text-shadow: 0 0 5px currentColor, 0 0 10px currentColor; /* Efeito de brilho reduzido */
+    }
+}
+
+/* --- TEMA CLÁSSICO (OVERRIDES) --- */
+/* Estas regras só se aplicam quando o botão de tema for clicado */
+
+body.tema-classico {
+    background-color: #212529 !important; /* Volta para o fundo padrão do Bootstrap (bg-dark) */
+    color: #fff !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body.tema-classico .titulo-grande {
+    color: #fff;
+    text-shadow: none;
+    animation: none;
+    font-family: inherit;
+}
+
+body.tema-classico .botao-personalizado, 
+body.tema-classico .btn-primary {
+    background: #0d6efd !important; /* Azul padrão Bootstrap */
+    border: 1px solid #0d6efd !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    transform: none !important;
+    font-family: inherit;
+}
+
+body.tema-classico #sortear-btn,
+body.tema-classico .btn-success {
+    background: #198754 !important; /* Verde padrão Bootstrap */
+    border: 1px solid #198754 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    transform: none !important;
+    font-family: inherit;
+}
+
+body.tema-classico .botao-personalizado:hover {
+    background: #0b5ed7 !important;
+}
+
+body.tema-classico #sortear-btn:hover {
+    background: #157347 !important;
+}
+
+body.tema-classico .roleta-fundo {
+    background: #333;
+    box-shadow: none;
+}
+
+body.tema-classico .centro-roleta {
+    background: #fff;
+    border-color: #ccc;
+    box-shadow: none;
+}
+
+body.tema-classico .ponteiro-giratorio::before {
+    background-color: #110df0; /* Ciano padrão */
+    box-shadow: none;
+}
+
+body.tema-classico #datetime {
+    color: #fff;
+    text-shadow: none;
+}
+
+body.tema-classico .img-titulo {
+    filter: none; /* Remove brilho das imagens */
+}
+
+body.tema-classico .footer-text {
+    color: #adb5bd;
+}
+
+/* Restaura inputs e cards para o visual padrão escuro */
+body.tema-classico .login-container, 
+body.tema-classico .card {
+    background-color: #343a40 !important; /* bg-dark/secondary */
+    border: 1px solid rgba(255,255,255,.125);
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+body.tema-classico .form-control {
+    background-color: #fff;
+    color: #212529;
+    border: 1px solid #ced4da;
+}
+
+body.tema-classico .form-control:focus {
+    background-color: #fff;
+    color: #212529;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+/* --- PÁGINAS DE LOGIN E CONFIG --- */
+.login-container, .card {
+    background-color: rgba(10, 10, 16, 0.8) !important;
+    border: 1px solid #00aaff;
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.list-group-item {
+    background-color: #1a1d24 !important;
+    border-color: #333 !important;
+}
+
+.form-control {
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #444;
+}
+.form-control:focus {
+    background-color: #333;
+    color: #fff;
+    border-color: #00aaff;
+    box-shadow: 0 0 5px #00aaff;
 }

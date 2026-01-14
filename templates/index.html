@@ -6,15 +6,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="bg-dark text-white" onclick="detectarClique(event)">
-<div class="position-absolute top-0 end-0 m-3">
+<body class="bg-dark text-white">
+<div class="header-links">
+    <button id="btn-tema" class="btn btn-outline-info me-2">🎨 Tema</button>
     <a href="/config" class="btn btn-outline-light">⚙️ Configurações (Admin)</a>
 </div>
 <div class="container text-center py-4">
     <h1 class="mb-4 animated fadeInDown titulo-grande px-5">
-      <img src="{{ url_for('static', filename='img/dado.gif') }}" alt="Dado" style="height: 130px; margin-right: 10px; vertical-align: middle;">
+      <img src="{{ url_for('static', filename='img/dado.gif') }}" alt="Dado" class="img-titulo">
       Sorteio Malha Fina
-      <img src="{{ url_for('static', filename='img/Bahianinho.gif') }}" alt="Bahianinho" style="height: 130px; margin-left: 10px; vertical-align: middle;">
+      <img src="{{ url_for('static', filename='img/Bahianinho.gif') }}" alt="Bahianinho" class="img-titulo">
     </h1>
 
     <div id="datetime" class="mb-4 fs-5"></div>
@@ -27,19 +28,17 @@
 
     <!-- Estrutura da Roleta -->
     <div class="roleta-container mb-4">
-        <div class="roleta-palco">
-            <div class="roleta-fundo"></div> <!-- Simula a espessura 3D -->
-            <div class="roleta" id="roleta">
-                <div class="centro-roleta"></div> <!-- Cubo central -->
-            </div>
-            <div class="seta"></div>
-        </div>
+        <div class="roleta-fundo"></div>
+        <div class="roleta-estatica"></div>
+        <div class="ponteiro-giratorio" id="ponteiro"></div>
+        <div class="centro-roleta"></div>
     </div>
 
     <div id="resultado" class="display-1 mt-5 fw-bold animated"></div>
-    <div class="mt-4 animated fadeInDown">CD - 1401 </div>
-    <button class="btn btn-success btn-lg px-5" id="sortear-btn">🎯 REALIZAR SORTEIO</button>
-    <div class="m-1 animated fadeInDown">Desenvolvido por Clayton S. Silva</div>
+    <div class="mt-4 animated fadeInDown footer-text">CD - 1401</div>
+    <button class="btn btn-success btn-lg px-5 mb-3" id="sortear-btn">🎯 REALIZAR SORTEIO</button>
+
+    <div class="m-1 animated fadeInDown footer-text">Desenvolvido por Clayton S. Silva</div>
 </div>
 <script src="{{ url_for('static', filename='custom.js') }}"></script>
 </body>
