@@ -16,7 +16,7 @@ else:
 
 app.secret_key = "chave_secreta_segura" # Necessário para o login funcionar
 SENHA_ADMIN = "82465123"#DFINA SUA SENHA DE ADMIN AQUI
-SENHA_USUARIO = "via@clayton" # Senha para acessar o sorteio (Operadores)
+SENHA_USUARIO = "clayton" # Senha para acessar o sorteio (Operadores)
 
 PALAVRAS_MALHA = ['VAI PARA MALHA', 'SEGUIR PARA MALHA', 'VOCÊ MALHOU']
 PALAVRAS_LIBERADO = ['CARRO LIBERADO', 'PODE SEGUIR', 'AUTORIZADO']
