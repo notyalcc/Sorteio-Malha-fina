@@ -49,6 +49,7 @@ db = SQLAlchemy(app)
 
 # --- Database Model for Buttons ---
 class Button(db.Model):
+    __tablename__ = 'button'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
 
@@ -57,47 +58,58 @@ class Button(db.Model):
 
 # Função para inicializar o banco de dados e migrar do JSON se necessário
 def initialize_database():
-    with app.app_context():
-        db.create_all() # Garante que as tabelas existem
-        # Verifica se já existem botões no banco de dados
-        if not Button.query.first():
-            # Se o DB estiver vazio, tenta carregar do JSON (passo de migração)
-            if os.path.exists(BOTAO_JSON):
+    try:
+        with app.app_context():
+            # Força a criação das tabelas se não existirem
+            db.create_all()
+            db.session.commit()
+            print("[*] Tabelas verificadas/criadas com sucesso.")
+
+            # Verifica se já existem dados
+            stmt_check = db.select(Button).limit(1)
+            if db.session.execute(stmt_check).first() is None:
+                print("[*] Banco de dados vazio. Iniciando população inicial...")
+                
+                # Tenta migrar do JSON existente
+                botoos_iniciais = []
+                if os.path.exists(BOTAO_JSON):
+                    try:
+                        with open(BOTAO_JSON, "r", encoding="utf-8") as f:
+                            botoos_iniciais = json.load(f)
+                            print(f"[+] Lidos {len(botoos_iniciais)} botões do arquivo JSON.")
+                    except Exception as e:
+                        print(f"[!] Erro ao ler JSON: {e}")
+
+                # Se não houver JSON ou falhar, usa padrão
+                if not botoos_iniciais:
+                    botoos_iniciais = [f"Botão {i+1}" for i in range(8)]
+                    print("[*] Usando botões padrão.")
+
+                # Salva no banco
+                for nome in botoos_iniciais:
+                    db.session.add(Button(name=nome))
+                
                 try:
-                    with open(BOTAO_JSON, "r", encoding="utf-8") as f:
-                        json_buttons = json.load(f)
-                        if json_buttons:
-                            for name in json_buttons:
-                                db.session.add(Button(name=name))
-                            db.session.commit()
-                            # Não removemos o arquivo no Render para evitar erros de permissão, 
-                            # apenas ignoramos nas próximas vezes
-                            print(f"Migrated {len(json_buttons)} buttons from JSON to DB.")
-                        else:
-                            raise ValueError("JSON vazio")
-                except (json.JSONDecodeError, IOError) as e:
-                    print(f"Error migrating from JSON: {e}")
-            
-            # Se ainda não houver botões (ou a migração falhou), adiciona os padrões
-            if not Button.query.first():
-                default_buttons = [f"Botão {i+1}" for i in range(8)]
-                for name in default_buttons:
-                    db.session.add(Button(name=name))
-                db.session.commit()
-                print(f"Initialized DB with {len(default_buttons)} default buttons.")
+                    db.session.commit()
+                    print("[+] Banco de dados populado com sucesso.")
+                except Exception as e:
+                    db.session.rollback()
+                    print(f"[!!!] Erro ao salvar dados iniciais: {e}")
+    except Exception as e:
+        print(f"[!!!] ERRO CRÍTICO na inicialização do banco: {e}")
+
+# Inicializa o banco de dados assim que o módulo é carregado.
+initialize_database()
 
 def carregar_botoes():
-    with app.app_context():
-        return [b.name for b in Button.query.order_by(Button.id).all()]
+    stmt = db.select(Button).order_by(Button.id)
+    return [b.name for b in db.session.execute(stmt).scalars()]
 
 def salvar_botoes(lista):
-    with app.app_context():
-        # Limpa os botões existentes
-        Button.query.delete()
-        # Adiciona os novos botões
-        for name in lista:
-            db.session.add(Button(name=name))
-        db.session.commit()
+    db.session.execute(db.delete(Button))
+    for name in lista:
+        db.session.add(Button(name=name))
+    db.session.commit()
 
 @app.route("/")
 def index():
@@ -178,11 +190,13 @@ def configuracao():
 
     return render_template("config.html", botoes=botoes)
 
-def abrir_navegador():
-    webbrowser.open_new("http://127.0.0.1:5000")
 
 if __name__ == "__main__":
-    initialize_database() # Chama a função de inicialização do banco de dados
-    # Abre o navegador automaticamente após 1 segundo
-    Timer(1, abrir_navegador).start()
+    # A função initialize_database() já é chamada globalmente para garantir que o DB seja configurado no Render.
+    # Apenas abre o navegador se estiver rodando localmente (não no Render)
+    if not os.environ.get('RENDER'):
+        def abrir_navegador():
+            webbrowser.open_new("http://127.0.0.1:5000")
+        Timer(1, abrir_navegador).start()
+
     app.run(host="0.0.0.0", port=5000)
