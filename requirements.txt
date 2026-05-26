@@ -1,3 +1,5 @@
 flask
 gunicorn
 waitress
+flask-sqlalchemy
+psycopg2-binary
