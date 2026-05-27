@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="bg-dark text-white">
+
+<!-- Veículo que atravessa a tela -->
+<div id="veiculo-animado" class="veiculo">🚗</div>
+
 <div class="header-links">
     <button id="btn-tema" class="btn btn-outline-info me-2">🎨 Tema</button>
     <a href="/config" class="btn btn-outline-light">⚙️ Configurações (Admin)</a>
@@ -28,6 +32,7 @@
 
     <!-- Estrutura da Roleta -->
     <div class="roleta-container mb-4">
+        <div class="roleta-borda-neon"></div>
         <div class="roleta-fundo"></div>
         <div class="roleta-estatica"></div>
         <div class="ponteiro-giratorio" id="ponteiro"></div>

@@ -15,8 +15,9 @@ else:
     base_dir = os.path.dirname(os.path.abspath(__file__))
     app = Flask(__name__)
 
-SENHA_ADMIN = "admin"#DFINA SUA SENHA DE ADMIN AQUI
-SENHA_USUARIO = "admin" # Senha para acessar o sorteio (Operadores)
+# Recomenda-se usar variáveis de ambiente para senhas em produção
+SENHA_ADMIN = os.environ.get("SENHA_ADMIN", "admin")
+SENHA_USUARIO = os.environ.get("SENHA_USUARIO", "admin")
 
 PALAVRAS_MALHA = ['VAI PARA MALHA', 'SEGUIR PARA MALHA', 'VOCÊ MALHOU']
 PALAVRAS_LIBERADO = ['CARRO LIBERADO', 'PODE SEGUIR', 'AUTORIZADO']
@@ -31,7 +32,7 @@ CORES = {
 }
 
 # Necessário para o login funcionar
-app.secret_key = "chave_secreta_segura" 
+app.secret_key = os.environ.get("SECRET_KEY", "chave_secreta_padrao_para_dev")
 
 # Garante que o JSON seja salvo no mesmo local do executável/script
 BOTAO_JSON = os.path.join(base_dir, "button_names.json")
@@ -66,7 +67,7 @@ def initialize_database():
             print("[*] Tabelas verificadas/criadas com sucesso.")
 
             # Verifica se já existem dados
-            stmt_check = db.select(Button).limit(1)
+            stmt_check = db.select(db.func.count(Button.id))
             if db.session.execute(stmt_check).first() is None:
                 print("[*] Banco de dados vazio. Iniciando população inicial...")
                 
@@ -102,21 +103,25 @@ def initialize_database():
 initialize_database()
 
 def carregar_botoes():
-    stmt = db.select(Button).order_by(Button.id)
-    return [b.name for b in db.session.execute(stmt).scalars()]
+    return db.session.scalars(db.select(Button).order_by(Button.id)).all()
 
 def salvar_botoes(lista):
-    db.session.execute(db.delete(Button))
-    for name in lista:
-        db.session.add(Button(name=name))
-    db.session.commit()
+    try:
+        db.session.execute(db.delete(Button))
+        for name in lista:
+            db.session.add(Button(name=name))
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(f"Erro ao salvar: {e}")
 
 @app.route("/")
 def index():
     if not session.get("usuario_logado"):
         return redirect(url_for("login_usuario"))
     botoes = carregar_botoes()
-    return render_template("index.html", botoes=botoes)
+    # Extrai apenas os nomes para o template
+    return render_template("index.html", botoes=[b.name for b in botoes])
 
 @app.route("/sortear", methods=["POST"])
 def sortear():
@@ -170,7 +175,7 @@ def configuracao():
     if not session.get("admin_logado"):
         return redirect(url_for("login"))
     
-    botoes = carregar_botoes()
+    botoes = [b.name for b in carregar_botoes()]
     
     if request.method == "POST":
         acao = request.form.get("acao")
