@@ -1,6 +1,10 @@
 # Sorteio-Malha-fina
 Aplicação visual de sorteio ("Malha Fina" vs "Liberado") desenvolvida com Python e Flask. Possui interface inspirada em estética Cyberpunk/Neon, com animações complexas, física de partículas e feedback imersivo. Funciona como Desktop ou Web App.
 
+<div align="center">
+  <img src="static/img/banner.png" width="100%" alt="Banner Sorteio Malha Fina">
+</div>
+
 # 🎲 Sorteio Visual - Malha Fina
 
 Uma aplicação interativa de alta fidelidade desenvolvida em **Python (Flask)** para sorteios aleatórios. O sistema utiliza uma estética Cyberpunk para indicar se um veículo foi **"Liberado"** (Verde) ou se deve **"Seguir para Malha"** (Vermelho).
