@@ -1,34 +1,45 @@
 # Sorteio-Malha-fina
-Aplicação visual de sorteio ("Malha Fina" vs "Liberado") desenvolvida com Python e Flask. Possui interface animada, temas visuais, efeitos sonoros e painel administrativo. Funciona como Desktop ou Web App.<img width="1732" height="899" alt="image" src="https://github.com/user-attachments/assets/5c0378df-29ea-4b23-90f0-88fc093c7192" />
+Aplicação visual de sorteio ("Malha Fina" vs "Liberado") desenvolvida com Python e Flask. Possui interface inspirada em estética Cyberpunk/Neon, com animações complexas, física de partículas e feedback imersivo. Funciona como Desktop ou Web App.
 
 # 🎲 Sorteio Visual - Malha Fina
 
-Uma aplicação interativa desenvolvida em **Python (Flask)** para realizar sorteios aleatórios visuais. O sistema simula uma dinâmica de "Malha Fina", indicando se o usuário foi **"Liberado"** (Verde) ou se deve **"Seguir para Malha"** (Vermelho).
+Uma aplicação interativa de alta fidelidade desenvolvida em **Python (Flask)** para sorteios aleatórios. O sistema utiliza uma estética Cyberpunk para indicar se um veículo foi **"Liberado"** (Verde) ou se deve **"Seguir para Malha"** (Vermelho).
 
 Ideal para controle de fluxo, auditorias aleatórias, dinâmicas de grupo ou qualquer cenário que precise de um sorteio visual e divertido.
 
 ## 🚀 Funcionalidades
 
-*   **Roleta com Ponteiro Giratório:** Animação de um ponteiro que gira sobre uma roleta estática, criando suspense.
+*   **Roleta 3D com Perspectiva:** Interface modernizada com profundidade 3D, bordas neon e inclinação dinâmica.
+*   **Veículo Animado Reativo:**
+    *   **Sucesso:** O veículo cruza a tela em alta velocidade com som de motor e faíscas neon verdes.
+    *   **Malha:** O veículo freia bruscamente, deixa marcas de pneu no asfalto, emite fumaça e ativa sirenes de polícia.
+    *   **Explosão:** Efeito de partículas para resultados críticos ("Você Malhou").
+*   **Feedback Imersivo Total:**
+    *   **Visual:** Tremor de interface, pulsação de fundo em vermelho e explosão de partículas sincronizadas.
+    *   **Sonoro:** Efeitos de "tick" que desaceleram, som de frenagem, impacto e motor gerados via Web Audio API.
+*   **Voz Robótica Futurista:** Síntese de voz (Web Speech API) processada para soar mecânica e imponente.
 *   **Temas Visuais:** Alterne com um clique entre o tema **Futurista** (neon, escuro) e o tema **Clássico** (padrão). A escolha é salva no navegador.
-*   **Feedback Sonoro Avançado:**
-    *   Efeitos de "tick" que desaceleram junto com o ponteiro.
-    *   Síntese de voz (Web Speech API) que anuncia o resultado sorteado.
 *   **Painel Administrativo:** Área restrita (login) para adicionar, editar ou remover os botões de sorteio.
-*   **Persistência de Dados:** As configurações dos botões são salvas automaticamente em um arquivo JSON.
+*   **Persistência de Dados:** Gerenciamento robusto via **SQLAlchemy**, permitindo uso de SQLite local ou bancos PostgreSQL em produção.
 *   **Sorteio Direcionado (Easter Egg):** Clique na metade esquerda da tela para forçar o próximo resultado como "Liberado" ou na metade direita para "Malha Fina".
 *   **Híbrido:** Pode rodar como um site na web ou como um aplicativo Desktop (executável Windows).
 
 ## 🛠️ Tecnologias Utilizadas
 
-*   **Backend:** Python 3, Flask
-*   **Frontend:** HTML5, CSS3, JavaScript, Bootstrap 5
+*   **Backend:** Python 3, Flask, SQLAlchemy (ORM)
+*   **Frontend:** HTML5, CSS3 (Animações 3D/Keyframes), JavaScript (ES6+), Bootstrap 5
 *   **Deploy/Build:** Gunicorn (Web), PyInstaller (Desktop)
-*   **Áudio:** Web Audio API (para efeitos sonoros), Web Speech API (para síntese de voz)
+*   **Áudio/Voz:** Web Audio API (Sintetizadores dinâmicos), Web Speech API
 
 ## 📸 Screenshots
 
-*(Adicione aqui prints da tela inicial e do painel de admin)*
+### Demonstração de Uso
+![Demonstração do Sorteio](static/img/demo_sorteio.gif)
+
+### Interface Administrativa
+<div align="center">
+  <img src="static/img/admin_screenshot.png" width="45%" alt="Painel Admin">
+</div>
 
 ## ⚙️ Como Rodar Localmente
 
